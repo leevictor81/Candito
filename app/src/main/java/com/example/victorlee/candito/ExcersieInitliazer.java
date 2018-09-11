@@ -1,11 +1,14 @@
 package com.example.victorlee.candito;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,21 +17,51 @@ import java.util.List;
  */
 
 public class ExcersieInitliazer {
+    private final int DEFAULT_WORKOUT_VALUE = 100;
 
-    public static void addWeekOneExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
+    private int benchValue;
+    private int squatValue;
+    private int deadliftValue;
+
+    public ExcersieInitliazer(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("profileValues", Context.MODE_PRIVATE);
+        String activeProfile = sharedPref.getString("activeProfile", null);
+
+        if (activeProfile == null) {
+            benchValue = DEFAULT_WORKOUT_VALUE;
+            squatValue = DEFAULT_WORKOUT_VALUE;
+            deadliftValue = DEFAULT_WORKOUT_VALUE;
+        } else {
+            benchValue = sharedPref.getInt(activeProfile+"_bench", DEFAULT_WORKOUT_VALUE);
+            squatValue = sharedPref.getInt(activeProfile+"_squat", DEFAULT_WORKOUT_VALUE);
+            deadliftValue = sharedPref.getInt(activeProfile+"_deadlift", DEFAULT_WORKOUT_VALUE);
+        }
+    }
+
+    private int roundToFiveAndGetStringValue(double value) {
+        return new BigDecimal(5*(Math.round(value/5))).intValueExact();
+    }
+
+    public void addWeekOneExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
         List<String> listOfRepsAndSets;
 
         if (dayValue.equals("Day 1")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "215 X 6", "215 X 6", "215 X 6", "215 X 6");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.8);
+            int deadliftValue = roundToFiveAndGetStringValue(this.deadliftValue*0.8);
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+" X 6", squatValue+" X 6", squatValue+" X 6", squatValue+" X 6");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
-            listOfRepsAndSets = Arrays.asList("Warm", "230 X 6", "230 X 6");
+            listOfRepsAndSets = Arrays.asList("Warm", deadliftValue+" X 6", deadliftValue+" X 6");
             addExercise(inflater, workoutPage, "Deadlift", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X4", "X4", "X4");
             addExercise(inflater, workoutPage, "Powercleans", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 2")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "90 X 10", "120 X 10", "135 X 8", "140 X 6");
+            int benchValue1 = roundToFiveAndGetStringValue(this.benchValue*0.5);
+            int benchValue2 = roundToFiveAndGetStringValue(this.benchValue*0.675);
+            int benchValue3 = roundToFiveAndGetStringValue(this.benchValue*0.75);
+            int benchValue4 = roundToFiveAndGetStringValue(this.benchValue*0.775);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue1+" X 10", benchValue2+" X 10", benchValue3+" X 8", benchValue4+" X 6");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X10", "X8", "X6");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -41,7 +74,11 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X8-12", "X8-12", "X8-12");
             addExercise(inflater, workoutPage, "Lateral Dumbbell Raise", listOfRepsAndSets);
         } else if (dayValue.equals("Day 3")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "90 X 10", "120 X 10", "135 X 8", "140 X 6");
+            int benchValue1 = roundToFiveAndGetStringValue(this.benchValue*0.5);
+            int benchValue2 = roundToFiveAndGetStringValue(this.benchValue*0.675);
+            int benchValue3 = roundToFiveAndGetStringValue(this.benchValue*0.75);
+            int benchValue4 = roundToFiveAndGetStringValue(this.benchValue*0.775);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue1+" X 10", benchValue2+" X 10", benchValue3+" X 8", benchValue4+" X 6");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X10", "X8", "X6");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -54,16 +91,19 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X8-12", "X8-12", "X8-12");
             addExercise(inflater, workoutPage, "Lateral Dumbbell Raise", listOfRepsAndSets);
         } else if (dayValue.equals("Day 4")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "190 X 8", "190 X 8", "190 X 8", "190 X 8");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.7);
+            int deadliftValue = roundToFiveAndGetStringValue(this.deadliftValue*0.7);
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+" X 8", squatValue+" X 8", squatValue+" X 8", squatValue+" X 8");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
-            listOfRepsAndSets = Arrays.asList("Warm", "205 X 8", "205 X 8");
+            listOfRepsAndSets = Arrays.asList("Warm", deadliftValue+" X 8", deadliftValue+" X 8");
             addExercise(inflater, workoutPage, "Deadlift", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X4", "X4", "X4");
             addExercise(inflater, workoutPage, "Powercleans", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 5")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "145XMR");
+            int benchValue = roundToFiveAndGetStringValue(this.benchValue*0.8);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue+"XMR");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X10", "X8", "X6");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -78,11 +118,12 @@ public class ExcersieInitliazer {
         }
     }
 
-    public static void addWeekTwoExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
+    public void addWeekTwoExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
         List<String> listOfRepsAndSets;
 
         if (dayValue.equals("Day 1")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "215X10MR");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.8);
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+"X10MR");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X 8", "X 8", "X 8", "X 8");
             addExercise(inflater, workoutPage, "Deadlift Variation", listOfRepsAndSets);
@@ -91,7 +132,10 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 2")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "130 X 10", "140 X 8", "150 X 6-8");
+            int benchValue1 = roundToFiveAndGetStringValue(this.benchValue*0.725);
+            int benchValue2 = roundToFiveAndGetStringValue(this.benchValue*0.775);
+            int benchValue3 = roundToFiveAndGetStringValue(this.benchValue*0.8)+5;
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue1+" X 10", benchValue2+" X 8", benchValue3+" X 6-8");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X8", "X8");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -104,7 +148,8 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X8-12", "X8-12", "X8-12");
             addExercise(inflater, workoutPage, "Lateral Dumbbell Raise", listOfRepsAndSets);
         } else if (dayValue.equals("Day 3")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "220X10MR");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.85)+5;
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+"X10MR");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X 8", "X 8", "X 8", "X 8");
             addExercise(inflater, workoutPage, "Deadlift Variation", listOfRepsAndSets);
@@ -113,7 +158,10 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 4")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "130 X 10", "140 X 8", "150 X 6-8");
+            int benchValue1 = roundToFiveAndGetStringValue(this.benchValue*0.725);
+            int benchValue2 = roundToFiveAndGetStringValue(this.benchValue*0.775);
+            int benchValue3 = roundToFiveAndGetStringValue(this.benchValue*0.8)+5;
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue1+" X 10", benchValue2+" X 8", benchValue3+" X 6-8");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X8", "X8");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -126,7 +174,8 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X8-12", "X8-12", "X8-12");
             addExercise(inflater, workoutPage, "Lateral Dumbbell Raise", listOfRepsAndSets);
         } else if (dayValue.equals("Day 5")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "140XMR");
+            int benchValue = roundToFiveAndGetStringValue(this.benchValue*0.8)-5;
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue+"XMR");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X8", "X8");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -141,16 +190,19 @@ public class ExcersieInitliazer {
         }
     }
 
-    public static void addWeekThreeExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
+    public void addWeekThreeExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
         List<String> listOfRepsAndSets;
 
         if (dayValue.equals("Day 1")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "240 X 4-6", "240 X 4-6", "240 X 4-6");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.85)+5;
+            int deadliftValue = roundToFiveAndGetStringValue(this.deadliftValue*0.875);
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+" X 4-6", squatValue+" X 4-6", squatValue+" X 4-6");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
-            listOfRepsAndSets = Arrays.asList("Warm", "250 X 3-6", "250 X 3-6");
+            listOfRepsAndSets = Arrays.asList("Warm", deadliftValue+" X 3-6", deadliftValue+" X 3-6");
             addExercise(inflater, workoutPage, "Deadlift Variation", listOfRepsAndSets);
         } else if (dayValue.equals("Day 2")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "155 X 4-6", "155 X 4-6", "155 X 4-6");
+            int benchValue = roundToFiveAndGetStringValue(this.benchValue*0.85);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue+" X 4-6", benchValue+" X 4-6", benchValue+" X 4-6");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X6", "X6", "X6");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -159,12 +211,14 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X6", "X6", "X6");
             addExercise(inflater, workoutPage, "Weighted Pull-up", listOfRepsAndSets);
         } else if (dayValue.equals("Day 3")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "230 X 4-6");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.85+5)+5;
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+" X 4-6");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X 8");
             addExercise(inflater, workoutPage, "Deadlift Variation", listOfRepsAndSets);
         } else if (dayValue.equals("Day 4")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "160 X 4-6", "160 X 4-6", "160 X 4-6");
+            int benchValue = roundToFiveAndGetStringValue(this.benchValue*0.85)+5;
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue+" X 4-6", benchValue+" X 4-6", benchValue+" X 4-6");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X6", "X6", "X6");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -175,11 +229,14 @@ public class ExcersieInitliazer {
         }
     }
 
-    public static void addWeekFourExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
+    public void addWeekFourExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
         List<String> listOfRepsAndSets;
 
         if (dayValue.equals("Day 1")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "240 x 3", "245 x 3", "250 x 3");
+            int squatValue1 = roundToFiveAndGetStringValue(this.squatValue*0.9)-5;
+            int squatValue2 = roundToFiveAndGetStringValue(this.squatValue*0.9);
+            int squatValue3 = roundToFiveAndGetStringValue(this.squatValue*0.9)+5;
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue1+" x 3", squatValue2+" x 3", squatValue3+" x 3");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X 6", "X 6");
             addExercise(inflater, workoutPage, "Deadlift Variation", listOfRepsAndSets);
@@ -188,7 +245,10 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 2")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "155 X 3", "155 X 3", "160 X 3");
+            int benchValue1 = roundToFiveAndGetStringValue(this.benchValue*0.875-5);
+            int benchValue2 = roundToFiveAndGetStringValue(this.benchValue*0.9-5);
+            int benchValue3 = roundToFiveAndGetStringValue(this.benchValue*0.9);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue1+" X 3", benchValue2+" X 3", benchValue3+" X 3");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X10", "X8", "X8");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -201,16 +261,23 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X8-12", "X8-12", "X8-12");
             addExercise(inflater, workoutPage, "Lateral Dumbbell Raise", listOfRepsAndSets);
         } else if (dayValue.equals("Day 3")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "250 x 3", "255 x 1-2");
+            int squatValue1 = roundToFiveAndGetStringValue(this.squatValue*0.9)+5;
+            int squatValue2 = roundToFiveAndGetStringValue(this.squatValue*0.95);
+            int deadliftValue1 = roundToFiveAndGetStringValue(this.deadliftValue*0.9)+5;
+            int deadliftValue2 = roundToFiveAndGetStringValue(this.deadliftValue*0.95);
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue1+" x 3", squatValue2+" x 1-2");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
-            listOfRepsAndSets = Arrays.asList("Warm", "265 X 3", "275 X 1-2");
+            listOfRepsAndSets = Arrays.asList("Warm", deadliftValue1+" X 3", deadliftValue2+" X 1-2");
             addExercise(inflater, workoutPage, "Deadlift", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X4", "X4", "X4");
             addExercise(inflater, workoutPage, "Powercleans", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 4")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "160 X 3", "160 X 2-4", "170 X 1-2");
+            int benchValue1 = roundToFiveAndGetStringValue(this.benchValue*0.875);
+            int benchValue2 = roundToFiveAndGetStringValue(this.benchValue*0.9);
+            int benchValue3 = roundToFiveAndGetStringValue(this.benchValue*0.95);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue1+" X 3", benchValue2+" X 2-4", benchValue3+" X 1-2");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X10", "X10", "X8", "X8");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -225,20 +292,25 @@ public class ExcersieInitliazer {
         }
     }
 
-    public static void addWeekFiveExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
+    public void addWeekFiveExercises(LayoutInflater inflater, String dayValue, LinearLayout workoutPage) {
         List<String> listOfRepsAndSets;
 
         if (dayValue.equals("Day 1")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "265 X 1-4");
+            int squatValue = roundToFiveAndGetStringValue(this.squatValue*0.975);
+            int deadliftValue1 = roundToFiveAndGetStringValue(this.deadliftValue*0.675);
+            int deadliftValue2 = roundToFiveAndGetStringValue(this.deadliftValue*0.7);
+            int deadliftValue3 = roundToFiveAndGetStringValue(this.deadliftValue*0.725);
+            listOfRepsAndSets = Arrays.asList("Warm", squatValue+" X 1-4");
             addExercise(inflater, workoutPage, "Squat", listOfRepsAndSets);
-            listOfRepsAndSets = Arrays.asList("Warm", "195 X 4", "205 X 4", "210 X 2");
+            listOfRepsAndSets = Arrays.asList("Warm", deadliftValue1+" X 4", deadliftValue2+" X 4", deadliftValue3+" X 2");
             addExercise(inflater, workoutPage, "Deadlift", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X4", "X4", "X4");
             addExercise(inflater, workoutPage, "Powercleans", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X7-10", "X7-10", "X7-10");
             addExercise(inflater, workoutPage, "Leg Curl", listOfRepsAndSets);
         } else if (dayValue.equals("Day 2")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "175 X 1-4");
+            int benchValue = roundToFiveAndGetStringValue(this.benchValue*0.975);
+            listOfRepsAndSets = Arrays.asList("Warm", benchValue+" X 1-4");
             addExercise(inflater, workoutPage, "Bench Press", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X8", "X6", "X6");
             addExercise(inflater, workoutPage, "Dumbbell Row", listOfRepsAndSets);
@@ -251,7 +323,8 @@ public class ExcersieInitliazer {
             listOfRepsAndSets = Arrays.asList("Warm", "X8-12", "X8-12", "X8-12");
             addExercise(inflater, workoutPage, "Lateral Dumbbell Raise", listOfRepsAndSets);
         } else if (dayValue.equals("Day 3")) {
-            listOfRepsAndSets = Arrays.asList("Warm", "285 X 1-4");
+            int deadliftValue = roundToFiveAndGetStringValue(this.deadliftValue*0.975);
+            listOfRepsAndSets = Arrays.asList("Warm", deadliftValue+" X 1-4");
             addExercise(inflater, workoutPage, "Deadlift", listOfRepsAndSets);
             listOfRepsAndSets = Arrays.asList("Warm", "X4", "X4", "X4");
             addExercise(inflater, workoutPage, "Powercleans", listOfRepsAndSets);

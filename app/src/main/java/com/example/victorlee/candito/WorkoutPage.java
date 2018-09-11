@@ -9,12 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import static com.example.victorlee.candito.ExcersieInitliazer.addWeekFiveExercises;
-import static com.example.victorlee.candito.ExcersieInitliazer.addWeekFourExercises;
-import static com.example.victorlee.candito.ExcersieInitliazer.addWeekOneExercises;
-import static com.example.victorlee.candito.ExcersieInitliazer.addWeekThreeExercises;
-import static com.example.victorlee.candito.ExcersieInitliazer.addWeekTwoExercises;
-
 public class WorkoutPage extends AppCompatActivity {
     public static final int WEEK_ONE_MAX_DAYS = 5;
     public static final int WEEK_TWO_MAX_DAYS = 5;
@@ -25,7 +19,7 @@ public class WorkoutPage extends AppCompatActivity {
     private String weekValue;
     private String dayValue;
 
-    private float x1, x2, y1, y2;
+    private ExcersieInitliazer excersieInitliazer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +29,8 @@ public class WorkoutPage extends AppCompatActivity {
         Intent intent = getIntent();
         weekValue = intent.getStringExtra("week");
         dayValue = intent.getStringExtra("day");
+
+        excersieInitliazer = new ExcersieInitliazer(WorkoutPage.this);
 
         initializeWeek();
     }
@@ -73,19 +69,19 @@ public class WorkoutPage extends AppCompatActivity {
 
         if (weekValue.equals("Week 1")) {
             addDayButtons(WEEK_ONE_MAX_DAYS, workoutPage);
-            addWeekOneExercises(getLayoutInflater(), dayValue, workoutPage);
+            excersieInitliazer.addWeekOneExercises(getLayoutInflater(), dayValue, workoutPage);
         } else if (weekValue.equals("Week 2")) {
             addDayButtons(WEEK_TWO_MAX_DAYS, workoutPage);
-            addWeekTwoExercises(getLayoutInflater(), dayValue, workoutPage);
+            excersieInitliazer.addWeekTwoExercises(getLayoutInflater(), dayValue, workoutPage);
         } else if (weekValue.equals("Week 3")) {
             addDayButtons(WEEK_THREE_MAX_DAYS, workoutPage);
-            addWeekThreeExercises(getLayoutInflater(), dayValue, workoutPage);
+            excersieInitliazer.addWeekThreeExercises(getLayoutInflater(), dayValue, workoutPage);
         } else if (weekValue.equals("Week 4")) {
             addDayButtons(WEEK_FOUR_MAX_DAYS, workoutPage);
-            addWeekFourExercises(getLayoutInflater(), dayValue, workoutPage);
+            excersieInitliazer.addWeekFourExercises(getLayoutInflater(), dayValue, workoutPage);
         } else if (weekValue.equals("Week 5")) {
             addDayButtons(WEEK_FIVE_MAX_DAYS, workoutPage);
-            addWeekFiveExercises(getLayoutInflater(), dayValue, workoutPage);
+            excersieInitliazer.addWeekFiveExercises(getLayoutInflater(), dayValue, workoutPage);
         }
     }
 
