@@ -46,7 +46,7 @@ public class WorkoutPage extends AppCompatActivity {
 
     public void toggleDayButton(View view) {
         Button button = (Button) view;
-        String dayValue = (String) button.getText();
+        String dayValue = button.getText().toString();
 
         Intent intent = new Intent(this, WorkoutPage.class);
         intent.putExtra("week", weekValue);

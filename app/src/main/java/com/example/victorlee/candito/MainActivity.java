@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void toggleDoneButton(View view) {
         Button button = (Button) view;
-        String state = (String) button.getText();
+        String state = button.getText().toString();
         if (state.equals("DONE?")) {
             state = "DONE";
         } else {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void weekButton(View view) {
         Button button = (Button) view;
-        String weekValue = (String) button.getText();
+        String weekValue = button.getText().toString();
 
         Intent intent = new Intent(this, WorkoutPage.class);
         intent.putExtra("week", weekValue);
