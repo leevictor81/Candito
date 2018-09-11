@@ -1,6 +1,8 @@
 package com.example.victorlee.candito;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -8,8 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class WorkoutPage extends AppCompatActivity {
+    private final int DEFAULT_WORKOUT_VALUE = 100;
     public static final int WEEK_ONE_MAX_DAYS = 5;
     public static final int WEEK_TWO_MAX_DAYS = 5;
     public static final int WEEK_THREE_MAX_DAYS = 4;
@@ -30,9 +34,21 @@ public class WorkoutPage extends AppCompatActivity {
         weekValue = intent.getStringExtra("week");
         dayValue = intent.getStringExtra("day");
 
-        excersieInitliazer = new ExcersieInitliazer(WorkoutPage.this);
+        SharedPreferences sharedPref = getSharedPreferences("profileValues", Context.MODE_PRIVATE);
+        String activeProfile = sharedPref.getString("activeProfile", "");
 
-        initializeWeek();
+        if (activeProfile.isEmpty()) {
+            LinearLayout workoutPage = findViewById(R.id.workout_page);
+            getLayoutInflater().inflate(R.layout.error_textview, workoutPage);
+            TextView textView = workoutPage.findViewById(R.id.error_textview);
+            textView.setText("Select an active profile in the profile manager");
+        } else {
+            int benchValue = sharedPref.getInt(activeProfile+"_bench", DEFAULT_WORKOUT_VALUE);
+            int squatValue = sharedPref.getInt(activeProfile+"_squat", DEFAULT_WORKOUT_VALUE);
+            int deadliftValue = sharedPref.getInt(activeProfile+"_deadlift", DEFAULT_WORKOUT_VALUE);
+            excersieInitliazer = new ExcersieInitliazer(benchValue, squatValue, deadliftValue);
+            initializeWeek();
+        }
     }
 
     @Override

@@ -16,6 +16,9 @@ import java.util.Set;
 
 public class AddProfile extends AppCompatActivity {
     private final int DEFAULT_WORKOUT_VALUE = 100;
+
+    private boolean isNew;
+    private String profileName;
     private SharedPreferences sharedPref;
 
     @Override
@@ -23,6 +26,8 @@ public class AddProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_profile);
 
+        isNew = getIntent().getBooleanExtra("isNew", true);
+        profileName = getIntent().getStringExtra("profileName");
         sharedPref = getSharedPreferences("profileValues", Context.MODE_PRIVATE);
 
         initializeValues();
@@ -30,21 +35,33 @@ public class AddProfile extends AppCompatActivity {
 
     public void toggleSaveButton(View view) {
         SharedPreferences.Editor editor = sharedPref.edit();
-
         Set<String> users = sharedPref.getStringSet("users", new HashSet<String>());
         EditText name_editText = ((RelativeLayout)findViewById(R.id.profile_name)).findViewWithTag("edit_text");
-        String profileName = name_editText.getText().toString();
-        users.add(profileName);
+        String newProfileName = name_editText.getText().toString();
+
+        if (!isNew) {
+            users.remove(profileName);
+            editor.remove(profileName+"_bench");
+            editor.remove(profileName+"_squat");
+            editor.remove(profileName+"_deadlift");
+
+            String activeProfile = sharedPref.getString("activeProfile", "");
+            if (activeProfile.equals(profileName)) {
+                editor.putString("activeProfile", newProfileName);
+            }
+        }
+
+        users.add(newProfileName);
         editor.putStringSet("users", users);
 
         EditText bench_editText = ((RelativeLayout)findViewById(R.id.bench)).findViewWithTag("edit_text");
-        editor.putInt(profileName+"_bench", Integer.valueOf(bench_editText.getText().toString()));
+        editor.putInt(newProfileName+"_bench", Integer.valueOf(bench_editText.getText().toString()));
 
         EditText squat_editText = ((RelativeLayout)findViewById(R.id.squat)).findViewWithTag("edit_text");
-        editor.putInt(profileName+"_squat", Integer.valueOf(squat_editText.getText().toString()));
+        editor.putInt(newProfileName+"_squat", Integer.valueOf(squat_editText.getText().toString()));
 
         EditText deadlift_editText = ((RelativeLayout)findViewById(R.id.deadlift)).findViewWithTag("edit_text");
-        editor.putInt(profileName+"_deadlift", Integer.valueOf(deadlift_editText.getText().toString()));
+        editor.putInt(newProfileName+"_deadlift", Integer.valueOf(deadlift_editText.getText().toString()));
         editor.apply();
 
         startActivity(new Intent(this, ProfileManager.class));
@@ -66,7 +83,13 @@ public class AddProfile extends AppCompatActivity {
                 editor.remove(profileName+"_bench");
                 editor.remove(profileName+"_squat");
                 editor.remove(profileName+"_deadlift");
+
+                String activeProfile = sharedPref.getString("activeProfile", "");
+                if (activeProfile.equals(profileName)) {
+                    editor.remove("activeProfile");
+                }
                 editor.apply();
+
                 startActivity(new Intent(AddProfile.this, ProfileManager.class));
             }
         });
@@ -79,17 +102,12 @@ public class AddProfile extends AppCompatActivity {
     }
 
     private void initializeValues() {
-        Intent intent = getIntent();
-        Boolean isNew = intent.getBooleanExtra("isNew", true);
         int benchValue, squatValue, deadliftValue;
-        String profileName = "";
-
         if (isNew) {
             benchValue = DEFAULT_WORKOUT_VALUE;
             squatValue = DEFAULT_WORKOUT_VALUE;
             deadliftValue = DEFAULT_WORKOUT_VALUE;
         } else {
-            profileName = intent.getStringExtra("profileName");
             benchValue = sharedPref.getInt(profileName+"_bench", DEFAULT_WORKOUT_VALUE);
             squatValue = sharedPref.getInt(profileName+"_squat", DEFAULT_WORKOUT_VALUE);
             deadliftValue = sharedPref.getInt(profileName+"_deadlift", DEFAULT_WORKOUT_VALUE);

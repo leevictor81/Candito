@@ -17,25 +17,14 @@ import java.util.List;
  */
 
 public class ExcersieInitliazer {
-    private final int DEFAULT_WORKOUT_VALUE = 100;
-
     private int benchValue;
     private int squatValue;
     private int deadliftValue;
 
-    public ExcersieInitliazer(Context context) {
-        SharedPreferences sharedPref = context.getSharedPreferences("profileValues", Context.MODE_PRIVATE);
-        String activeProfile = sharedPref.getString("activeProfile", null);
-
-        if (activeProfile == null) {
-            benchValue = DEFAULT_WORKOUT_VALUE;
-            squatValue = DEFAULT_WORKOUT_VALUE;
-            deadliftValue = DEFAULT_WORKOUT_VALUE;
-        } else {
-            benchValue = sharedPref.getInt(activeProfile+"_bench", DEFAULT_WORKOUT_VALUE);
-            squatValue = sharedPref.getInt(activeProfile+"_squat", DEFAULT_WORKOUT_VALUE);
-            deadliftValue = sharedPref.getInt(activeProfile+"_deadlift", DEFAULT_WORKOUT_VALUE);
-        }
+    public ExcersieInitliazer(int benchValue, int squatValue, int deadliftValue) {
+        this.benchValue = benchValue;
+        this.squatValue = squatValue;
+        this.deadliftValue = deadliftValue;
     }
 
     private int roundToFiveAndGetStringValue(double value) {
